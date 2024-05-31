@@ -1,68 +1,75 @@
-# Astro Starter Kit: Blog
+# Mia - Astro & Tailwindcss & MDX Theme
 
-```sh
-npm create astro@latest -- --template blog
+[English](README.md) | [中文](README_zh.md) | [Demo](https://astro-theme-mia.pages.dev/)
+
+Mia is designed to be minimalist yet powerful, integrating the capabilities of Astro, MDX, and Rough Notation. Whether you're a developer, writer, or just someone who loves clean and efficient design, this theme is perfect for you.
+
+![Mia Theme Preview](public/theme-preview.png)
+
+### Get Started
+
+Install the dependencies:
+
+```bash
+npm install
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+Run and visit http://localhost:4321.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```bash
+npn run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Build the App:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```bash
+npm run build
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+You will then see the `dist` folder generated for publishing, which you can preview locally with the following command:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```bash
+npm run preview
+```
 
-## 🧞 Commands
+### Using Rough Notation
 
-All commands are run from the root of the project, from a terminal:
+Mia is based on the [Rough Notation](https://roughnotation.com/) library. You can use `<Notation />` component in your MDX content, such as:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```mdx
+In Swift, the `Codable` protocol is a type alias for the <Notation type="box" color="blue">`Encodable` and `Decodable`</Notation> protocols:
+```
 
-## 👀 Want to learn more?
+And following is the type of this component:
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```tsx
+type Props = {
+  type?: "underline" | "circle" | "crossed-off" | "highlight" | "strike-through" | "bracket";
+  color?: string;
+  strokeWidth?: number;
+};
+```
 
-## Credit
+### Theme Configuration
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Update the `src/config.ts` file to configure the theme:
+
+- `SITE_FAVICON`: the favicon of the site
+- `SITE_LOGO`: the logo of the site
+- `SITE_TITLE`: the title of the site
+- `SITE_DESCRIPTION`: the description of the site
+- `MENUS`: the menus of the site
+- `FOOTER_CONTENT`: the content of the footer
+- `GOOGLE_GTAG`: the Google Tag Manager ID
+
+### Theme Integrations
+
+- @astrojs/mdx: https://docs.astro.build/en/guides/markdown-content/
+- @astrojs/rss: https://docs.astro.build/en/guides/rss/
+- @astrojs/sitemap: https://docs.astro.build/en/guides/integrations-guide/sitemap/
+- @astrojs/tailwind: https://docs.astro.build/en/guides/integrations-guide/tailwind/
+- rough-notation: https://roughnotation.com/
+
+### License
+
+- [MIT](https://github.com/infinity-ooo/astro-theme-mia/blob/main/LICENSE)
