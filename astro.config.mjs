@@ -6,26 +6,24 @@ import { defineConfig } from "astro/config";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 
+import vercel from "@astrojs/vercel/serverless";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://blog.henrihuuskonen.dev",
   trailingSlash: "never",
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "viewport",
+    defaultStrategy: "viewport"
   },
-  integrations: [
-    mdx({
-      syntaxHighlight: "shiki",
-      shikiConfig: {
-        theme: "github-light",
-      },
-      remarkPlugins: [remarkMath],
-      rehypePlugins: [rehypeKatex],
-    }),
-    sitemap(),
-    tailwind(),
-    react(),
-  ],
+  integrations: [mdx({
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "github-light"
+    },
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex]
+  }), sitemap(), tailwind(), react()],
   output: "static",
+  adapter: vercel()
 });
