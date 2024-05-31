@@ -25,5 +25,11 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex]
   }), sitemap(), tailwind(), react()],
   output: "static",
-  adapter: vercelStatic()
+  adapter: vercelStatic(
+      {
+        webAnalytics: {
+          enabled: true,
+        },
+      }
+  )
 });
