@@ -1,0 +1,14 @@
+---
+title: "How to keep your project dependencies up to date?"
+description: "If you are looking for a way to automatically keep your project dependencies up to date, I have a solution for you."
+date: "2024-05-01"
+tags: ["GitHub Actions", "Dependabot", "Playwright"]
+cover: "https://images.unsplash.com/photo-1579762593175-20226054cad0"
+---
+
+You might be like me and have a one or two personal projects that you haven't touched for a while. <Notation type="highlight" color="yellow">When you finally get back to them, you realize that there are a lot of dependencies that need to be updated.</Notation> It can be a tedious task to go through all of them and check if there are any new versions available.
+
+<Notation type="bracket"><Notation type="highlight" color="red">TLDR;</Notation> Using [Dependabot](https://github.com/dependabot) automated pull requests for version upgrades, [Playwright](https://playwright.dev/) for E2E and [visual regression testing](https://playwright.dev/docs/test-snapshots) and [GitHub Actions](https://docs.github.com/en/actions) to automatically approve and merge the pull requests, you can almost completely automate the process of keeping your project dependencies up to date.</Notation>
+
+## Let's get started
+
