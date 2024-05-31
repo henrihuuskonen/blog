@@ -6,7 +6,7 @@ import { defineConfig } from "astro/config";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 
-import vercel from "@astrojs/vercel/serverless";
+import vercelStatic from '@astrojs/vercel/static';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,5 +25,5 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex]
   }), sitemap(), tailwind(), react()],
   output: "static",
-  adapter: vercel()
+  adapter: vercelStatic()
 });
