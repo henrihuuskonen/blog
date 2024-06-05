@@ -3,12 +3,180 @@ title: "How to keep your project dependencies up to date?"
 description: "If you are looking for a way to automatically keep your project dependencies up to date, I have a solution for you."
 date: "2024-05-01"
 tags: ["GitHub Actions", "Dependabot", "Playwright"]
-cover: "https://images.unsplash.com/photo-1579762593175-20226054cad0"
+cover: "https://cdn.jsdelivr.net/gh/huuskonenhenri/blog/public/covers/keep-dependencies-up-to-date.png"
 ---
 
-You might be like me and have a one or two personal projects that you haven't touched for a while. <Notation type="highlight" color="yellow">When you finally get back to them, you realize that there are a lot of dependencies that need to be updated.</Notation> It can be a tedious task to go through all of them and check if there are any new versions available.
+You might be like me and have a one or two personal projects that you haven't touched for a while. <Notation type="highlight" color="yellow">When you finally get back to them, you realize that there are a lot of dependencies that needs to be updated.</Notation> It can be a tedious task to go through all of them and check if there are any new versions available. You might also find yourself in a situation where the dependencies are so out-dated, that it would be easier to start everything from scratch, rather than migrating to new versions.
 
-<Notation type="bracket"><Notation type="highlight" color="red">TLDR;</Notation> Using [Dependabot](https://github.com/dependabot) automated pull requests for version upgrades, [Playwright](https://playwright.dev/) for E2E and [visual regression testing](https://playwright.dev/docs/test-snapshots) and [GitHub Actions](https://docs.github.com/en/actions) to automatically approve and merge the pull requests, you can almost completely automate the process of keeping your project dependencies up to date.</Notation>
+<Notation type="bracket"><Notation type="highlight" color="red">TLDR;</Notation> Using
+    [Dependabot](https://github.com/dependabot) automated pull requests for version upgrades,
+    [Playwright](https://playwright.dev/) for E2E and [visual regression
+    testing](https://playwright.dev/docs/test-snapshots) and [GitHub Actions](https://docs.github.com/en/actions) to
+    automatically approve and merge the pull requests, you can almost completely automate the process of keeping your
+    project dependencies up to date. </Notation>
+
+The following guide is based on a Next.js project, but <Notation type="highlight" color="yellow">the same principles can be applied to other projects based on different programming languages and frameworks.</Notation>
+- Playwright for example [supports Node.js, Python, Java and .NET](https://playwright.dev/docs/languages).
+- [GitHub](https://github.com/) could be [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/product) with equivalent features.
+- [Dependabot](https://github.com/dependabot) is available for GitHub, but there are other tools like [Renovate](https://github.com/renovatebot/renovate) that can be used as well.
 
 ## Let's get started
 
+### 1. Adding Dependabot to your repository
+
+<Notation type="highlight" color="yellow">This is done easily by adding a `dependabot.yml` file inside the `.github`
+    folder in your repository.</Notation> Here is an example of how the file could look like:
+
+```yml
+# .github/dependabot.yml
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    open-pull-requests-limit: 10
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "08:00"
+      timezone: "Europe/Helsinki"
+```
+
+To quickly go through the main parts of the file:
+- `package-ecosystem` specifies the package manager that Dependabot should look for updates for. In this case, it's npm.
+- `open-pull-requests-limit` specifies the maximum number of open pull requests that Dependabot can have at the same time.
+- `directory` specifies the directory where Dependabot should look for updates. In this case, it's the root directory.
+- `schedule` specifies how often Dependabot should check for updates. In this case, it's daily at 8:00 AM in the Europe/Helsinki timezone.
+
+### 2. Adding Playwright tests part of your CI pipeline
+
+<Notation type="highlight" color="yellow">To make sure that the updates don't break your
+    application</Notation>, you can add Playwright tests to your CI pipeline.
+
+<br/>
+
+<strong>1. Install playwright</strong>
+
+You should follow the [official installation guide](https://playwright.dev/docs/intro) to install Playwright.
+
+<strong>2. Create a test file</strong>
+
+```typescript
+// tests/example.spec.ts
+import {test, expect} from '@playwright/test';
+
+const BASE_URL = 'http://localhost:3000';
+
+test('verify title', async ({page}) => {
+    await page.goto(BASE_URL);
+    await expect(page).toHaveTitle(/Page title/);
+});
+```
+
+In the test we are simply visiting the local development server and checking that the title of the page matches the regex `/Page title/`.
+
+
+<strong>3. Adding visual regression tests</strong>
+
+You can add visual regression tests to your Playwright tests by using the `toHaveScreenshot` matcher. Here is an example of how you could add a visual regression test to the previous test file:
+
+```typescript
+test("regression test", async ({page}) => {
+    await page.goto(BASE_URL)
+    await expect(page).toHaveScreenshot('frontpage.png', {fullPage: true});
+})
+```
+
+You can read more about the visual regression testing with screenshots from the official documentation [here](https://playwright.dev/docs/test-snapshots).
+
+
+<strong>4. Running the tests with GitHub Actions</strong>
+
+You can create a [GitHub Actions workflow file](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions) that runs the tests on every pull request. Here is an example of how the file could look like:
+
+```yml
+# .github/workflows/playwright.yml
+
+name: Playwright tests
+
+on:
+  pull_request:
+
+jobs:
+  playwright-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Install dependencies
+        run: npm i
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Build app
+        run: npm run build
+      - name: Run Playwright tests
+        id: run-tests
+        run: npm run test
+```
+
+### 3. Automatically approve and merge Dependabot pull requests
+
+<Notation type="highlight" color="yellow">To automatically approve and merge the Dependabot pull requests</Notation>,
+you can create a [GitHub Actions workflow file](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions) that listens for new pull requests from Dependabot and automatically approves and merges them.
+
+Here is an example of how the file could look like:
+
+```yml
+# .github/workflows/dependabot.yml
+
+name: Dependabot auto-approve
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Approve a PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+```
+
+## What do we have so far?
+
+<Notation type="bracket">
+Here's a quick recap what we have done so far:
+    - <Notation type="highlight" color="yellow">Added Dependabot to your repository to automatically create pull requests for version upgrades.</Notation>
+    - <Notation type="highlight" color="yellow">Added Playwright tests to your CI pipeline to make sure that the updates don't break your application.</Notation>
+    - <Notation type="highlight" color="yellow">Created a GitHub Actions workflow file that listens for new pull requests from Dependabot and automatically approves and merges them.</Notation>
+</Notation>
+
+There are still a few caveats to this setup that you should be aware of:
+- The Dependabot workflow for approving and merging <Notation type="highlight" color="red">does not take into account whether the tests passed or not.</Notation>
+- If you are on GitHub Free plan and are planning to keep the repository private, <Notation type="highlight" color="red">you are not able to use [branch protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) to require certain checks to pass before merging.</Notation>
+
+I was able to find <Notation type="highlight" color="yellow">a workaround</Notation> for the above mentioned by creating a single workflow file, that listens for both the Dependabot and Playwright events. The workflow file then runs the Playwright tests and <i>only</i> approves and merges the Dependabot pull request if the tests pass.
+
+It's <Notation type="highlight" color="yellow">not dependant on branch protection rules nor any 3rd party actions.</Notation> It will still work even <Notation type="highlight" color="yellow">if I decide to keep the repository private.</Notation>
+
+Here's an example of a final workflow file that was able to achieve this for me personally and have been running successfully for a while now:
+
+<script src="https://gist.github.com/henrihuuskonen/c4769655e576234758fe7d9fd0dc4b5e.js"></script>
+
+If you managed to get this far, I hope you found this guide helpful and that you were able to automate the process of keeping your project dependencies up to date. If you have any <Notation type="highlight" color="yellow">questions or feedback</Notation>, feel free to reach out to me [here](https://www.henrihuuskonen.dev/)!
