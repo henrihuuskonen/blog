@@ -8,6 +8,8 @@ cover: "https://cdn.jsdelivr.net/gh/henrihuuskonen/blog/public/covers/automate-d
 
 You might be like me and have a one or two personal projects that you haven't touched for a while. <Notation type="highlight" color="yellow">When you finally get back to them, you realize that there are a lot of dependencies that needs to be updated.</Notation> It can be a tedious task to go through all of them and check if there are any new versions available. You might also find yourself in a situation where the dependencies are so out-dated, that it would be easier to start everything from scratch, rather than migrating to new versions.
 
+<br />
+
 <Notation type="bracket"><Notation type="highlight" color="red">TLDR;</Notation> Using
     [Dependabot](https://github.com/dependabot) automated pull requests for version upgrades,
     [Playwright](https://playwright.dev/) for E2E and [visual regression
@@ -15,10 +17,14 @@ You might be like me and have a one or two personal projects that you haven't to
     automatically approve and merge the pull requests, you can almost completely automate the process of keeping your
     project dependencies up to date. </Notation>
 
+<br />
+
 The following guide is based on a Next.js project, but <Notation type="highlight" color="yellow">the same principles can be applied to other projects based on different programming languages and frameworks.</Notation>
 - Playwright for example [supports Node.js, Python, Java and .NET](https://playwright.dev/docs/languages).
 - [GitHub](https://github.com/) could be [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/product) with equivalent features.
 - [Dependabot](https://github.com/dependabot) is available for GitHub, but there are other tools like [Renovate](https://github.com/renovatebot/renovate) that can be used as well.
+
+<br />
 
 ## Let's get started
 
@@ -47,6 +53,8 @@ To quickly go through the main parts of the file:
 - `directory` specifies the directory where Dependabot should look for updates. In this case, it's the root directory.
 - `schedule` specifies how often Dependabot should check for updates. In this case, it's daily at 8:00 AM in the Europe/Helsinki timezone.
 
+<br />
+
 ### 2. Adding Playwright tests part of your CI pipeline
 
 <Notation type="highlight" color="yellow">To make sure that the updates don't break your
@@ -54,11 +62,13 @@ To quickly go through the main parts of the file:
 
 <br/>
 
-<strong>1. Install playwright</strong>
+<strong>2.1. Install playwright</strong>
 
 You should follow the [official installation guide](https://playwright.dev/docs/intro) to install Playwright.
 
-<strong>2. Create a test file</strong>
+<br />
+
+<strong>2.2. Create a test file</strong>
 
 ```typescript
 // tests/example.spec.ts
@@ -74,8 +84,9 @@ test('verify title', async ({page}) => {
 
 In the test we are simply visiting the local development server and checking that the title of the page matches the regex `/Page title/`.
 
+<br />
 
-<strong>3. Adding visual regression tests</strong>
+<strong>2.3. Adding visual regression tests</strong>
 
 You can add visual regression tests to your Playwright tests by using the `toHaveScreenshot` matcher. Here is an example of how you could add a visual regression test to the previous test file:
 
@@ -88,8 +99,9 @@ test("regression test", async ({page}) => {
 
 You can read more about the visual regression testing with screenshots from the official documentation [here](https://playwright.dev/docs/test-snapshots).
 
+<br />
 
-<strong>4. Running the tests with GitHub Actions</strong>
+<strong>2.4. Running the tests with GitHub Actions</strong>
 
 You can create a [GitHub Actions workflow file](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions) that runs the tests on every pull request. Here is an example of how the file could look like:
 
@@ -118,6 +130,8 @@ jobs:
         id: run-tests
         run: npm run test
 ```
+
+<br />
 
 ### 3. Automatically approve and merge Dependabot pull requests
 
@@ -158,6 +172,8 @@ jobs:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 ```
 
+<br />
+
 ## What do we have so far?
 
 <Notation type="bracket">
@@ -167,16 +183,173 @@ Here's a quick recap what we have done so far:
     - <Notation type="underline">Created a GitHub Actions workflow file that listens for new pull requests from Dependabot and automatically approves and merges them.</Notation>
 </Notation>
 
+<br />
+
 There are still a few caveats to this setup that you should be aware of:
 - The Dependabot workflow for approving and merging <Notation type="highlight" color="red">does not take into account whether the tests passed or not.</Notation>
 - If you are on GitHub Free plan and are planning to keep the repository private, <Notation type="highlight" color="red">you are not able to use [branch protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) to require certain checks to pass before merging.</Notation>
+
+<br />
 
 I was able to find <Notation type="highlight" color="yellow">a workaround</Notation> for the above mentioned by creating a single workflow file, that listens for both the Dependabot and Playwright events. The workflow file then runs the Playwright tests and <i>only</i> approves and merges the Dependabot pull request if the tests pass.
 
 It's <Notation type="highlight" color="yellow">not dependant on branch protection rules nor any 3rd party actions.</Notation> It will still work even <Notation type="highlight" color="yellow">if I decide to keep the repository private.</Notation>
 
+<br />
+
 Here's an example of a final workflow file that was able to achieve this for me personally and have been running successfully for a while now:
 
-<script src="https://gist.github.com/henrihuuskonen/c4769655e576234758fe7d9fd0dc4b5e.js"></script>
+```yaml
+# .github/workflows/ci.yml
+name: CI checks
+
+on:
+  push:
+permissions:
+  pull-requests: write
+  contents: write
+  statuses: read
+  checks: read
+  actions: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.tool-versions'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  playwright-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.tool-versions'
+          cache: 'npm'
+
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm i
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Next.js cache
+        uses: actions/cache@v4
+        with:
+          # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Build app
+        run: npm run build
+
+      - name: Run Playwright tests
+        id: run-tests
+        run: npm run test:ci
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.run-tests.conclusion == 'failure'
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 3
+
+      - name: Update screenshots in visual tests
+        id: run-tests-update
+        if: failure() && steps.run-tests.conclusion == 'failure'
+        run: npm run test:update-snapshots
+
+      - name: Upload updated Playwright screenshots
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.run-tests-update.conclusion == 'success'
+        with:
+          name: playwright-screenshots-updated
+          path: e2e/__screenshots__/**/*.png
+          retention-days: 3
+
+  dependabot-auto-approve-and-merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.actor == 'dependabot[bot]'
+    needs:
+      - playwright-tests
+      - lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        id: get_pr_data
+        with:
+          script: |
+            return (
+              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                commit_sha: context.sha,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              })
+            ).data[0];
+      - name: Pull Request data
+        id: pr_data
+        run: echo "{pull_request_number}=${{ fromJson(steps.get_pr_data.outputs.result).number }}" >> $GITHUB_OUTPUT
+      - name: Approve and Merge PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash .github/approve-and-merge.sh ${{ steps.pr_data.outputs.pull_request_number }}
+```
+
+<br />
+
+And here's a quick shell script that you can use to approve and merge the pull request based on the step results:
+
+```shell
+# approve-and-merge.sh
+PR_NUMBER=$1
+
+PR_CHECK_COMMAND=$(gh pr checks $PR_NUMBER)
+# Check lines containing lint or playwright-tests and containing the word pass
+lint_check=$(echo "$COMMAND" | grep -c -E '^lint.*pass' | wc -l | awk '{$1=$1};1')
+playwright_tests_check=$(echo "$COMMAND" | grep -c -E '^playwright-tests.*pass' | wc -l | awk '{$1=$1};1')
+
+
+# Exit code based on the result
+if [ $lint_check -eq 1 ] && [ $playwright_tests_check -eq 1 ]; then
+    echo "Success: lint and playwright-tests both passed."
+    gh pr review $PR_NUMBER --approve
+    gh pr merge $PR_NUMBER --squash
+    exit 0
+else
+    echo "Failure: lint and/or playwright-tests did not pass."
+    exit 1
+fi
+```
+
+<br />
+<br />
 
 If you managed to get this far, I hope you found this guide helpful and that you were able to automate the process of keeping your project dependencies up to date. If you have any <Notation type="highlight" color="yellow">questions or feedback</Notation>, feel free to reach out to me [here](https://www.henrihuuskonen.dev/)!
