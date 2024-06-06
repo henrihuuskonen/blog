@@ -12,17 +12,5 @@ test("regression test", {tag: "@ci"}, async ({page}) => {
 
     await page.goto(BASE_URL)
 
-    // Remove the particles.js canvas element from the DOM
-    const elementToRemove = await page.$('#tsparticles');
-    expect(elementToRemove).not.toBeNull();
-
-    // Check if element exists before attempting to remove it
-    if (elementToRemove) {
-        // Remove the element from the DOM
-        await page.evaluate(element => {
-            element.remove();
-        }, elementToRemove);
-    }
-
     await expect(page).toHaveScreenshot('frontpage.png', {fullPage: true});
 })
