@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "test": "playwright test --grep-invert @ci",
     "test:ci": "playwright test",
-    "test:update-snapshots": "playwright test --update-snapshots"
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "start": "astro preview"
   },
   "dependencies": {
     "@astrojs/check": "0.7.0",
