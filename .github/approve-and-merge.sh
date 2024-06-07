@@ -12,7 +12,7 @@ playwright_tests_check=$(echo "$COMMAND" | grep -c -E '^playwright-tests.*pass' 
 if [ $lint_check -eq 1 ] && [ $playwright_tests_check -eq 1 ]; then
     echo "Success: lint and playwright-tests both passed."
     gh pr review $PR_NUMBER --approve
-    gh pr merge $PR_NUMBER --squash
+    gh pr merge $PR_NUMBER --squash --auto
     exit 0
 else
     echo "Failure: lint and/or playwright-tests did not pass."
