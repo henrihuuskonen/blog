@@ -38,10 +38,10 @@
     "remark-math": "6.0.0",
     "rough-notation": "0.5.1",
     "tailwindcss": "3.4.6",
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "1.47.1",
     "pre-commit": "1.2.2"
   },
   "pre-commit": [
