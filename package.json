@@ -41,7 +41,7 @@
     "typescript": "5.7.2"
   },
   "devDependencies": {
-    "@playwright/test": "1.48.2",
+    "@playwright/test": "1.49.0",
     "pre-commit": "1.2.2"
   },
   "pre-commit": [
