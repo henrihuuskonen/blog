@@ -19,7 +19,10 @@ export default defineConfig({
   integrations: [mdx({
     syntaxHighlight: "shiki",
     shikiConfig: {
-      theme: "github-light"
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
     },
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex]

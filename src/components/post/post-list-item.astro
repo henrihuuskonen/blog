@@ -23,8 +23,10 @@ const { post } = Astro.props;
     )
   }
   <div class="flex flex-col gap-2">
-    <div class="flex gap-2">
+    <div class="flex flex-wrap gap-1">
       <DateTag date={post.data.date} />
+    </div>
+    <div class="flex flex-wrap gap-1">
       {post.data.tags?.map((tag) => <Tag tag={tag} />)}
     </div>
     <a href={`/posts/${post.slug}`} target="_self">
