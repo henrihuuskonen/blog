@@ -1,23 +1,98 @@
 html,
 body {
-  width: 100vw;
-  height: 100vh;
-  content-visibility: auto;
-  -webkit-font-smoothing: antialiased;
+    width: 100vw;
+    height: 100vh;
+    content-visibility: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+html.dark {
+    background-color: #1f1f1f;
+    color: #fff;
+}
+
+:root {
+    --color-primary: #75a5f8;
+    --color-secondary: #f8f8f8;
+    --color-white: #fff;
+    --color-black: #1f1f1f;
+    --color-red: #e50000;
+}
+
+.color-primary {
+    color: var(--color-primary);
+}
+
+.bg-color-primary {
+    background-color: var(--color-primary);
+}
+
+.dark span {
+    color: var(--color-white);
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark p,
+.dark span,
+.dark li,
+.dark strong,
+.dark em {
+    color: #ffffff;
+}
+
+.dark [data-notion-type="highlight"][data-notion-color="yellow"] {
+    color: var(--color-black);
+}
+
+
+.dark [data-notion-type="highlight"] a {
+    color: var(--color-primary);
+}
+
+.dark code {
+    color: var(--color-primary);
+}
+
+.dark a {
+    color: var(--color-primary);
+}
+
+.dark a:hover {
+    color: var(--color-white);
+}
+
+.dark [data-notion-type="highlight"] > code {
+    color: var(--color-red);
+}
+
+.dark .tag {
+    color: var(--color-black);
 }
 
 *:focus-visible {
-  outline: none;
+    outline: none;
 }
 
 code {
-  @apply text-sm font-mono text-purple-700 font-medium;
+    @apply text-sm font-mono text-purple-700 font-medium;
 }
 
 pre.astro-code {
-  @apply px-4 py-3 rounded-lg text-xl !bg-zinc-50/60 leading-6 overflow-x-scroll;
+    @apply px-4 py-3 rounded-lg text-xl leading-6 overflow-x-scroll;
 }
 
 svg.rough-annotation {
-  opacity: 70%;
+    opacity: 70%;
 }
+
+.dark .astro-code,
+.dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+}
+

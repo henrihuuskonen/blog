@@ -77,6 +77,13 @@ The frontend is "protected" with visual regression testing, which are run in CI 
 
 If the job fails on the visual regression test, updated snapshots are saved under the jobs artifacts for easy updating.
 
+## How to update astro
+
+Run the following command to update astro to the latest version:
+```sh
+npx @astrojs/upgrade
+```
+
 ## License
 
 Distributed under the MIT License. See [MIT License](https://opensource.org/licenses/MIT) for more information.
