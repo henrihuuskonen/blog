@@ -27,6 +27,6 @@ export const MENUS = [
   },
 ];
 
-export const FOOTER_CONTENT = "";
+export const FOOTER_CONTENT = "Created by Henri Huuskonen";
 
 export const GOOGLE_GTAG = "G-XXXXXXXXXX";
