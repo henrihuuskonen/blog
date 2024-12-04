@@ -17,4 +17,16 @@ import ThemeIcon from "./ThemeIcon.astro";
   </div>
 </header>
 
+<script is:inline>
+  const initializeTheme = () => {
+    const savedTheme = localStorage.getItem('theme')
+    if (!savedTheme) {
+      const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      localStorage.setItem('theme', systemPreference);
+    }
+  };
+
+  // Initialize theme on page load
+  initializeTheme();
+</script>
 
