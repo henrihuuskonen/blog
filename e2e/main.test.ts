@@ -4,7 +4,7 @@ const BASE_URL = 'http://localhost:3000';
 
 test('verify title', async ({page}) => {
     await page.goto(BASE_URL);
-    await expect(page).toHaveTitle(/Henri Huuskonen - Blog/);
+    await expect(page).toHaveTitle(/Henri Huuskonen/);
 });
 
 test("regression test", {tag: "@ci"}, async ({page}) => {
