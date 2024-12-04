@@ -1,6 +1,6 @@
 export const SITE_FAVICON = "/favicon.ico";
 export const SITE_LOGO = "/henrihuuskonen-circle.png";
-export const SITE_TITLE = "Henri Huuskonen - Blog";
+export const SITE_TITLE = "Henri Huuskonen";
 export const SITE_DESCRIPTION =
   "Experienced Senior Software Engineer from Helsinki, Finland adept at optimizing business operations with React, NodeJS, Python.";
 
