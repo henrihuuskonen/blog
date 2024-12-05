@@ -10,7 +10,7 @@ type Props = {
 const { post } = Astro.props;
 ---
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 hover:scale-105">
   {
     post.slug && (
       <a href={`/posts/${post.slug}`} target="_self">

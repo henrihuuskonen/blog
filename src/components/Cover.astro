@@ -18,18 +18,19 @@ const {
     .cover__image {
         --magic-number: calc(-50vw + -60rem);
         height: calc(5rem + 50vw);
-        max-height: 400px;
+        max-height: 300px;
         margin-top: -1rem;
         transform: translate(var(--magic-number), 1px);
         opacity:0.997;
+        background: linear-gradient(180deg, rgba(255,255,255,1) 26%, rgba(85,82,82,1) 100%);
+    }
+
+    html.dark .cover__image {
+        background: linear-gradient(180deg, rgba(31,31,31,1) 26%, rgba(85,82,82,1) 100%);
     }
 </style>
 
 <svg class="cover__image" width="5000" height="400" viewBox="0 0 5000 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect id="cover-bg" width="5000" height="400" fill=`${bgColor}`/>
-    <mask id="mask0_2001_52" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="5000" height="400">
-        <rect width="5000" height="400" fill=`${bgColor}`/>
-    </mask>
     <g mask="url(#mask0_2001_52)">
         <path d="M976 201.5C696.398 156.67 553.698 155.624 325 229V400H5064V313.5L4964.5 260C4847.8 164.241 4775.91 162.19 4640.5 216C4453.96 131.343 4374.75 162.492 4247 260C4071.84 169.912 3973.63 160.119 3798 238C3622.37 203.822 3530.03 213.179 3380.5 300.5C3207.79 197.667 3129.82 215.221 2998 247.5C2867.76 179.015 2788.01 191.764 2639 225.5C2373.69 194.721 2231.25 210.132 1984 262C1848.06 209.877 1797.69 245.983 1702.5 289.5C1563.49 219.033 1482.63 221.877 1334.5 262C1230.92 182.159 1152.73 169.813 976 201.5Z"
               fill=`${thirdLayerColor}`/>
