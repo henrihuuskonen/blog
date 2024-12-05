@@ -1,0 +1,58 @@
+---
+title: "How to override Django dark mode css?"
+description: "But why settle for the standard blueish look when you can customize it?"
+date: "2024-05-01"
+tags: ["Django", "CSS", "Dark Mode"]
+cover: "/public/covers/django-dark-mode-cover.png"
+---
+
+The Django admin panel is an essential tool for managing and interacting with your web application’s data. While its default interface is functional, a growing number of developers and administrators prefer working with dark mode due to its visually appealing aesthetics and reduced eye strain during long working hours. But why settle for the standard blueish look when you can customize it?
+
+### TLDR
+
+Customizing Django Admin dark mode improves usability, reduces eye strain, and aligns the interface with your branding. To do this, create a custom base.html template in templates/admin/, add an `{% block extrahead %}`, and override CSS variables like --admin-body-bg and --admin-text-color.
+
+Customizing Django admin’s dark mode allows you to align the admin interface with your branding, improve usability for your team, and create a more comfortable environment tailored to your preferences. Whether it’s adjusting colors, adding custom CSS, or incorporating personalized themes, a well-customized dark mode can significantly enhance the user experience.
+
+Ready to give your admin panel a modern, eye-friendly makeover? Let’s dive into the  steps to make it uniquely yours.
+
+## Steps
+
+1. Start by creating a file in your project’s templates directory
+
+```
+mkdir -p templates/admin
+touch templates/admin/base.html
+```
+
+2. **Add the `{% block extrahead %}`**
+
+This block allows you to add content to the `<head>` section of the admin page.
+
+Here’s how your base.html should look:
+
+```
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+ {{ block.super }}
+ <style>
+     /* Your custom styles will go here */
+ </style>
+{% endblock %}
+```
+
+3. Override root variables inside the style block
+
+```
+
+```
+
+4. Test your changes and tweak
+
+Run your application to see your changes. Tip: If something looks off, use your browsers inspect to find the right variables to override!
+
+
+## Conclusion
+
+By following these steps, you can create a unique, polished Django admin interface that enhances usability and aesthetics.
