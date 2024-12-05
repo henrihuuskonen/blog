@@ -44,20 +44,31 @@
             return 'light';
         })();
 
-        if (theme === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
-
-        window.localStorage.setItem('theme', theme);
-
         const handleToggleClick = () => {
+            // Toggle dark mode
             const element = document.documentElement;
             element.classList.toggle("dark");
 
             const isDark = element.classList.contains("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
+
+            // Update cover
+            let coverElements = []
+
+            const firstLayerElements = document.getElementById("cover-first-layer")?.children
+            if (firstLayerElements) {
+                for (let i = 0; i < firstLayerElements.length; i++) {
+                    coverElements.push(firstLayerElements[i] as HTMLElement)
+                }
+            }
+            const coverBg = document.getElementById("cover-bg")
+            if (coverBg) {
+                coverElements.push(coverBg)
+            }
+
+            for (let i = 0; i < coverElements.length; i++) {
+                coverElements[i].setAttribute("fill", isDark ? "#1f1f1f" : "#fff");
+            }
         }
 
         const attachButtonListeners = () => {
