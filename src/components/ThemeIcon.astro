@@ -45,6 +45,7 @@
         })();
 
         const handleToggleClick = () => {
+            // Toggle dark mode
             const element = document.documentElement;
             element.classList.toggle("dark");
 
@@ -56,7 +57,9 @@
 
             const firstLayerElements = document.getElementById("cover-first-layer")?.children
             if (firstLayerElements) {
-                coverElements = coverElements.concat(Array.from(firstLayerElements))
+                for (let i = 0; i < firstLayerElements.length; i++) {
+                    coverElements.push(firstLayerElements[i] as HTMLElement)
+                }
             }
             const coverBg = document.getElementById("cover-bg")
             if (coverBg) {
