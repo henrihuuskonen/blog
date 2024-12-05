@@ -98,7 +98,7 @@ svg.rough-annotation {
 
 @media (min-width: 768px) {
     .cover__image {
-        --magic-number: calc(-50vw + -20rem) !important;
+        --magic-number: calc(-50vw + -50rem) !important;
     }
 
 }
