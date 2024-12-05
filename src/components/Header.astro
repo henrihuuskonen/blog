@@ -6,13 +6,13 @@ import Cover from "./Cover.astro";
 ---
 
 <header
-  class="sticky z-50 max-h-[400px] min-h-[200px] overflow-hidden"
+  class="sticky z-50 max-h-[400px] min-h-[230px] overflow-hidden"
 >
   <Cover />
   <div class="flex flex-row gap-8 items-center justify-between max-w-screen-lg mx-auto h-24 px-4 sm:px-6 absolute z-20 top-0 left-0 right-0">
     <a href="/" class="flex flex-row items-center justify-center gap-2">
       <img src={SITE_LOGO} alt="author avatar" class="w-10 rounded-full aspect-square" />
-      <span class="text-[12px] sm:text-2xl font-title font-black">{SITE_TITLE}</span>
+      <span class="text-[16px] sm:text-2xl font-title font-black">{SITE_TITLE}</span>
     </a>
     <Menus />
     <ThemeIcon />
