@@ -1,0 +1,77 @@
+---
+title: "How to override Django dark mode css?"
+description: "Why settle for the standard blueish look when you can customize it?"
+date: "2024-12-09"
+tags: ["Django", "CSS", "Dark Mode"]
+cover: "/covers/django-dark-mode-cover.png"
+---
+
+The [Django](https://www.djangoproject.com/) admin panel is <Notation type="highlight" color="yellow">an essential tool for managing and interacting</Notation> with your web application’s data. While its default interface is <Notation type="underline">functional</Notation>, a growing number of developers and administrators prefer working with <Notation type="highlight" color="red">dark mode</Notation> due to its visually appealing <Notation type="highlight" color="yellow">aesthetics</Notation> and <Notation type="highlight" color="yellow">reduced eye strain</Notation> during long working hours. But why settle for the standard blueish look when you can customize it?
+
+<br/>
+
+### <Notation type="highlight" color="red">TL;DR:</Notation>
+
+Customizing [Django](https://www.djangoproject.com/) admin's dark mode <Notation type="highlight" color="yellow">improves usability, reduces eye strain, and aligns the interface with your branding.</Notation> To do this, create a custom `base.html` template in `templates/admin/`, add an `{% block extrahead %}`, and override CSS variables like `--accent` and `--primary`.
+
+
+<br/>
+
+Ready to give your admin panel <Notation type="highlight" color="yellow">a modern, eye-friendly</Notation> makeover? Let’s dive into the  steps to make it uniquely yours.
+
+<br/>
+
+## Steps
+
+**1. Start by creating a file in your project’s templates directory**
+
+```shell
+mkdir -p templates/admin
+touch templates/admin/base.html
+```
+
+<br/>
+
+**2. Add the `{% block extrahead %}`**
+
+This block allows you to add content to the `<head>` section of the admin page.
+
+Here’s how your `base.html` should look:
+
+```html
+{% extends 'admin/base.html' %}
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        html[data-theme="dark"], :root {
+            /* Your custom styles will go here */
+        }
+    </style>
+{% endblock %}
+```
+
+<br/>
+
+**3. Override root variables inside the style block**
+
+```css
+--secondary: #fff;
+--breadcrumbs-bg: #fff;
+--accent: #fff;
+```
+
+<br/>
+
+**4. Test your changes and tweak**
+
+Run your application to see your changes.
+
+💡 *Tip: If something looks off, use your <Notation type="highlight" color="yellow">browsers inspect</Notation> to find the right variables to override!*
+
+<br/>
+
+## Conclusion
+
+By following these steps, you can create a unique, polished [Django](https://www.djangoproject.com/) admin interface that <Notation type="highlight" color="yellow">enhances usability and aesthetics</Notation>.
+
+If you have any <Notation type="highlight" color="yellow">questions or feedback</Notation>, feel free to reach out to me [here](https://www.henrihuuskonen.dev/)!
