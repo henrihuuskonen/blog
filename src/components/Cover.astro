@@ -1,13 +1,11 @@
 ---
 type Props = {
-    bgColor?: string;
     firstLayerColor?: string;
     secondLayerColor?: string;
     thirdLayerColor?: string;
 };
 
 const {
-    bgColor = "#1f1f1f",
     firstLayerColor = "#1f1f1f",
     secondLayerColor = "#ACACAC",
     thirdLayerColor = "#555252",
@@ -23,6 +21,13 @@ const {
         transform: translate(var(--magic-number), 1px);
         opacity:0.997;
         background: linear-gradient(180deg, rgba(255,255,255,1) 26%, rgba(85,82,82,1) 100%);
+    }
+
+    @media (min-width: 2000px) {
+        .cover__image {
+            --magic-number: calc(-50vw + 10rem) !important;
+        }
+
     }
 
     html.dark .cover__image {
@@ -48,9 +53,6 @@ const {
         <path d="M-1393.55 224.188C-1509.88 72.0284 -1671.66 166.108 -1671.66 166.108V445.44H223.687V256.349C105.352 24.5087 -125.823 193.948 -125.823 193.948C-294.587 70.1087 -487.816 193.948 -487.816 193.948C-611.143 2.42867 -845.315 140.188 -845.315 140.188C-1088.97 -31.1717 -1151.88 193.948 -1151.88 193.948C-1282.7 98.4283 -1393.55 224.188 -1393.55 224.188Z"
               fill=`${secondLayerColor}`/>
     </g>
-    <mask id="mask2_2001_52" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="5000" height="400">
-        <rect width="5000" height="400" fill="#192F3F"/>
-    </mask>
     <g id="cover-first-layer" mask="url(#mask2_2001_52)">
         <path d="M2259 351C2142.5 192.5 1980.5 290.5 1980.5 290.5V461.5H3878.5V384.5C3760 143 3528.5 319.5 3528.5 319.5C3359.5 190.5 3166 319.5 3166 319.5C3042.5 120 2808 263.5 2808 263.5C2564 84.9996 2501 319.5 2501 319.5C2370 220 2259 351 2259 351Z"
               fill=`${firstLayerColor}`/>

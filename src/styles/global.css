@@ -95,10 +95,3 @@ svg.rough-annotation {
     color: var(--shiki-dark) !important;
     background-color: var(--shiki-dark-bg) !important;
 }
-
-@media (min-width: 768px) {
-    .cover__image {
-        --magic-number: calc(-50vw + -50rem) !important;
-    }
-
-}
